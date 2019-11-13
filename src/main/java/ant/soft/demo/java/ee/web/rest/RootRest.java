@@ -2,6 +2,7 @@ package ant.soft.demo.java.ee.web.rest;
 
 import ant.soft.demo.java.ee.beans.Ping;
 import ant.soft.demo.java.ee.beans.jms.*;
+import ant.soft.demo.java.ee.beans.websocket.EchoBean;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -20,6 +21,9 @@ public class RootRest {
 
     @Inject
     private CommandSender commandSender;
+
+    @Inject
+    private EchoBean echoBean;
 
     @GET
     @Path("ping")
@@ -46,11 +50,20 @@ public class RootRest {
     }
 
     @POST
+    @Path("log")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response log(CommandEcho payload) {
+        commandSender.sendCommand(payload);
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("echo")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response echo(CommandEcho payload) {
-        commandSender.sendCommand(payload);
+    public Response echo(CommandEcho payload, @CookieParam("uid") String userId) {
+        echoBean.echo(payload, userId);
         return Response.ok().build();
     }
 

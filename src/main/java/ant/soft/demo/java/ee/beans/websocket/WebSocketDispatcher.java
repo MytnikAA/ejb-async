@@ -1,6 +1,5 @@
 package ant.soft.demo.java.ee.beans.websocket;
 
-import javax.enterprise.util.Nonbinding;
 import javax.inject.Singleton;
 import javax.websocket.Session;
 import java.util.*;
